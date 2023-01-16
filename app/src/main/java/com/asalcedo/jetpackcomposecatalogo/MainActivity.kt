@@ -1,7 +1,6 @@
 package com.asalcedo.jetpackcomposecatalogo
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.*
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +20,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.asalcedo.jetpackcomposecatalogo.model.Routes.*
 import com.asalcedo.jetpackcomposecatalogo.ui.theme.JetpackComposeCatalogoTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,13 +55,50 @@ class MainActivity : ComponentActivity() {
                     }*/
 
                     //SimpleRecyclerView()
-                    SuperHeroView()
+                    //SuperHeroView()
+                    //SuperHeroGridView()
+                    //SuperHeroWithSpecialControlsView()
+                    //SuperHeroStickyView()
+                    //ScaffoldExample()
 
+                    //Navegación
+                    //La variable gestiona los estados de la navegación
+                    val navigationController = rememberNavController()
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = Pantalla1.route
+                    ) {
+                        //Para navegar entre pantallas se necesita tener una ID única
+                        composable(Pantalla1.route) { Screen1(navigationController) }
+                        composable(Pantalla2.route) { Screen2(navigationController) }
+                        composable(Pantalla3.route) { Screen3(navigationController) }
+                        //en backStackEntry estará el argumento llamado name
+                        composable(
+                            Pantalla4.route,
+                            arguments = listOf(navArgument("age") { type = NavType.IntType })
+                        ) { backStackEntry ->
+                            Screen4(
+                                navigationController,
+                                backStackEntry.arguments?.getInt("age") ?: 0
+                            )
+
+                        }
+                        composable(
+                            Pantalla5.route,
+                            arguments = listOf(navArgument("name") { defaultValue = "Alex" })
+                        ) { backStackEntry ->
+                            Screen5(
+                                navigationController,
+                                backStackEntry.arguments?.getString("name")
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun MyDropDownMenu() {
